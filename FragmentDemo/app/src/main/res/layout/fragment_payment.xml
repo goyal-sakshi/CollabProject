@@ -3,9 +3,32 @@
     android:orientation="vertical" android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="payment"/>
+        android:orientation="horizontal"
+        android:padding="10dp">
+
+        <EditText
+            android:id="@+id/recharge_amount"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:hint="Enter amount"
+            android:inputType="number"/>
+
+        <TextView
+            android:id="@+id/recharge_button"
+            android:layout_marginLeft="20dp"
+            android:layout_width="0dp"
+            android:layout_weight="1"
+            android:layout_height="30dp"
+            android:text="RECHARGE"
+            android:background="@color/colorAccent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:textSize="16sp"/>
+
+    </LinearLayout>
 
 </LinearLayout>

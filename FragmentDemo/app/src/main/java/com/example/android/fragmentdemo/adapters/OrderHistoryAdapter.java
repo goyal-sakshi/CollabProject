@@ -10,7 +10,7 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import com.example.android.fragmentdemo.R;
-import com.example.android.fragmentdemo.data.Items;
+import com.example.android.fragmentdemo.data.orderHistory;
 
 import java.util.List;
 
@@ -18,11 +18,11 @@ import java.util.List;
  * Created by hp on 3/28/2018.
  */
 
-public class OrderHistoryAdapter extends ArrayAdapter<Items> {
+public class OrderHistoryAdapter extends ArrayAdapter<orderHistory> {
 
 
-    public OrderHistoryAdapter(@NonNull Context context, List<Items> itemIds) {
-        super(context,0,itemIds);
+    public OrderHistoryAdapter(@NonNull Context context, List<orderHistory> itemIds) {
+        super(context, 0, itemIds);
     }
 
     @NonNull
@@ -32,13 +32,15 @@ public class OrderHistoryAdapter extends ArrayAdapter<Items> {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_order_history, parent, false);
         }
 
-        Items currentItem = getItem(position);
+        orderHistory currentItem = getItem(position);
 
-        TextView itemNameTextView = (TextView) convertView.findViewById(R.id.item_name_order_history);
-        itemNameTextView.setText(currentItem.getName());
+        TextView dateTextView = (TextView) convertView.findViewById(R.id.date_order_history);
+        dateTextView.setText(currentItem.getDate());
 
-        TextView itemPriceTextView = (TextView) convertView.findViewById(R.id.item_price_order_history);
-        itemPriceTextView.setText(currentItem.getPrice());
+        TextView priceTextView = (TextView) convertView.findViewById(R.id.price_order_history);
+        priceTextView.setText(currentItem.getTotalPaid());
+
+
 
         return convertView;
     }

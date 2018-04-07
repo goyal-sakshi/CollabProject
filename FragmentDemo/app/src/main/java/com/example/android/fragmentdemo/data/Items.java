@@ -22,10 +22,6 @@ public class Items {
         this.imageUrl = imageUrl;
     }
 
-    public Items(String imageUrl)
-    {
-        this.imageUrl = imageUrl;
-    }
     public String getPrice() {
         return price;
     }
@@ -38,6 +34,10 @@ public class Items {
         return name;
     }
 
+    public String getImageUrl() {
+        return imageUrl;
+    }
+
     public void setName(String name) {
         this.name = name;
     }
@@ -48,10 +48,6 @@ public class Items {
 
     public void setQuantity(String quantity) {
         this.quantity = quantity;
-    }
-
-    public String getImageUrl() {
-        return imageUrl;
     }
 
     public void setImageUrl(String imageUrl) {

@@ -60,6 +60,7 @@ public class CartAdapter extends ArrayAdapter<Items> {
                     .into(itemImageView);
         }
 
+
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(FirebaseAuth.getInstance().getUid())
                 .child("cart").child(currentItem.getName()).child("quantity");

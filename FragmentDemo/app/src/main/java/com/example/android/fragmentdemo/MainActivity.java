@@ -157,7 +157,7 @@ public class MainActivity extends AppCompatActivity {
     }
     private void createUser(FirebaseUser user){
         DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference().child("users");
-        databaseReference.child(user.getUid()).child("balance").setValue("0");
+        databaseReference.child(user.getUid()).child("balance");
 
     }
 }
