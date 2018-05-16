@@ -35,7 +35,7 @@ public class CartAdapter extends ArrayAdapter<Items> {
 
     @NonNull
     @Override
-    public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
+    public View getView(final int position, @Nullable View convertView, @NonNull ViewGroup parent) {
         if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_cart, parent, false);
         }
@@ -53,7 +53,7 @@ public class CartAdapter extends ArrayAdapter<Items> {
 
         ImageView itemImageView = (ImageView) convertView.findViewById(R.id.item_img_cart);
         boolean isPhoto = currentItem.getImageUrl() != null;
-        if(isPhoto){
+        if (isPhoto) {
             itemImageView.setVisibility(View.VISIBLE);
             Glide.with(itemImageView.getContext())
                     .load(currentItem.getImageUrl())
@@ -64,6 +64,12 @@ public class CartAdapter extends ArrayAdapter<Items> {
         final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(FirebaseAuth.getInstance().getUid())
                 .child("cart").child(currentItem.getName()).child("quantity");
+
+        final DatabaseReference referenceCart = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(FirebaseAuth.getInstance().getUid()).child("cart");
+
+        final DatabaseReference referenceTotal = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(FirebaseAuth.getInstance().getUid()).child("total");
 
         Button decrementQuantityButton = (Button) convertView.findViewById(R.id.decrement_qty_button);
         decrementQuantityButton.setOnClickListener(new View.OnClickListener() {
@@ -79,8 +85,29 @@ public class CartAdapter extends ArrayAdapter<Items> {
                         }
                         databaseReference.setValue(String.valueOf(currentQ));
                         currentItem.setQuantity(String.valueOf(currentQ));
+
+                        referenceCart.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                long tot = 0;
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                                    Integer quan = Integer.parseInt(String.valueOf(ds.child("quantity").getValue()));
+                                    Integer pri = Integer.parseInt(String.valueOf(ds.child("price").getValue()));
+                                    tot += quan * pri;
+                                }
+                                referenceTotal.setValue(String.valueOf(tot));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                         notifyDataSetChanged();
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -102,8 +129,29 @@ public class CartAdapter extends ArrayAdapter<Items> {
 
                         databaseReference.setValue(String.valueOf(currentQ));
                         currentItem.setQuantity(String.valueOf(currentQ));
+
+                        referenceCart.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(DataSnapshot dataSnapshot) {
+                                long tot = 0;
+                                for (DataSnapshot ds : dataSnapshot.getChildren()) {
+
+                                    Integer quan = Integer.parseInt(String.valueOf(ds.child("quantity").getValue()));
+                                    Integer pri = Integer.parseInt(String.valueOf(ds.child("price").getValue()));
+                                    tot += quan * pri;
+                                }
+                                referenceTotal.setValue(String.valueOf(tot));
+                            }
+
+                            @Override
+                            public void onCancelled(DatabaseError databaseError) {
+
+                            }
+                        });
+
                         notifyDataSetChanged();
                     }
+
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
 
@@ -112,16 +160,17 @@ public class CartAdapter extends ArrayAdapter<Items> {
             }
         });
 
+        final DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference()
+                .child("users").child(FirebaseAuth.getInstance().getUid())
+                .child("cart");
+
         TextView removeFromCart = (TextView) convertView.findViewById(R.id.remove_item);
         removeFromCart.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                final DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference()
-                        .child("users").child(FirebaseAuth.getInstance().getUid())
-                        .child("cart");
-
                 dbReference.child(currentItem.getName()).removeValue();
-                notifyDataSetChanged();
+                CartAdapter.this.remove(currentItem);
+                CartAdapter.this.notifyDataSetChanged();
             }
         });
 

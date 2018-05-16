@@ -3,4 +3,7 @@
     <color name="colorPrimary">#009688</color>
     <color name="colorPrimaryDark">#00796B</color>
     <color name="colorAccent">#00BFA5</color>
+
+    <color name="evenItemColor">#E6EE9C</color>
+    <color name="oddItemColor">#FFECB3</color>
 </resources>

@@ -22,6 +22,7 @@ public class Items {
         this.imageUrl = imageUrl;
     }
 
+
     public String getPrice() {
         return price;
     }

@@ -12,7 +12,7 @@ import android.widget.TextView;
 
 import com.example.android.fragmentdemo.R;
 import com.example.android.fragmentdemo.adapters.OrderHistoryAdapter;
-import com.example.android.fragmentdemo.data.orderHistory;
+import com.example.android.fragmentdemo.data.HistoryOfOrders;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
@@ -30,17 +30,16 @@ import java.util.List;
 
 public class ProfileFragment extends Fragment {
 
-    private OrderHistoryAdapter mAdapter;
-    private ChildEventListener mChildEventListener;
+    private OrderHistoryAdapter mOrderAdapter;
 
-    public ProfileFragment(){
+    public ProfileFragment() {
 
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        View rootView = inflater.inflate(R.layout.fragment_profile,container,false);
+        View rootView = inflater.inflate(R.layout.fragment_profile, container, false);
 
         TextView username = (TextView) rootView.findViewById(R.id.username_profile);
         final TextView balance = (TextView) rootView.findViewById(R.id.balance_profile);
@@ -48,7 +47,7 @@ public class ProfileFragment extends Fragment {
         String user = FirebaseAuth.getInstance().getCurrentUser().getDisplayName();
         username.setText(user);
 
-        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+        final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                 .child("users").child(FirebaseAuth.getInstance().getUid()).child("balance");
 
         databaseReference.addListenerForSingleValueEvent(new ValueEventListener() {
@@ -65,43 +64,41 @@ public class ProfileFragment extends Fragment {
         });
 
         ListView listView = (ListView) rootView.findViewById(R.id.list_order_history);
-        List<orderHistory> items = new ArrayList<>();
-        mAdapter = new OrderHistoryAdapter(getContext(),items);
-        listView.setAdapter(mAdapter);
+
+        List<HistoryOfOrders> items = new ArrayList<>();
+        mOrderAdapter = new OrderHistoryAdapter(getContext(), items);
+        listView.setAdapter(mOrderAdapter);
 
         DatabaseReference dbReference = FirebaseDatabase.getInstance().getReference()
-                .child("users").child("history");
+                .child("users").child(FirebaseAuth.getInstance().getUid()).child("history");
 
-        if(mChildEventListener == null){
-            mChildEventListener = new ChildEventListener() {
-                @Override
-                public void onChildAdded(DataSnapshot dataSnapshot, String s) {
-                    orderHistory items = dataSnapshot.getValue(orderHistory.class);
-                    mAdapter.add(items);
-                }
+        dbReference.addChildEventListener(new ChildEventListener() {
+            @Override
+            public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+                HistoryOfOrders hisItems = dataSnapshot.getValue(HistoryOfOrders.class);
+                mOrderAdapter.add(hisItems);
+            }
 
-                @Override
-                public void onChildChanged(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildChanged(DataSnapshot dataSnapshot, String s) {
 
-                }
+            }
 
-                @Override
-                public void onChildRemoved(DataSnapshot dataSnapshot) {
+            @Override
+            public void onChildRemoved(DataSnapshot dataSnapshot) {
 
-                }
+            }
 
-                @Override
-                public void onChildMoved(DataSnapshot dataSnapshot, String s) {
+            @Override
+            public void onChildMoved(DataSnapshot dataSnapshot, String s) {
 
-                }
+            }
 
-                @Override
-                public void onCancelled(DatabaseError databaseError) {
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
 
-                }
-            };
-            dbReference.addChildEventListener(mChildEventListener);
-        }
+            }
+        });
 
         return rootView;
     }

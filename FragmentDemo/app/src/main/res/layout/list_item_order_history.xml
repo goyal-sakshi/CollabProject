@@ -1,21 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/orderHistoryLayout"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
     android:padding="5dp">
 
-
-    <TextView
-        android:id="@+id/date_order_history"
-        android:layout_width="match_parent"
-        android:layout_height="30dp"
-        android:layout_marginLeft="10dp"
-        android:fontFamily="sans-serif-smallcaps"
-        android:textColor="#000000"
-        android:textSize="22sp"
-        tools:text="Date" />
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -25,28 +16,57 @@
 
         <TextView
             android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="2"
-            android:fontFamily="sans-serif-smallcaps"
-            android:text="You paid :"
+            android:layout_height="30dp"
+            android:layout_weight="1"
+            android:fontFamily="@font/alegreya"
+            android:text="Order Date :"
             android:textColor="#000000"
-            android:textSize="20sp" />
+            android:textSize="22sp" />
+
+        <TextView
+            android:id="@+id/date_order_history"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_marginLeft="10dp"
+            android:layout_weight="2"
+            android:fontFamily="@font/alegreya"
+            android:textColor="#000000"
+            android:textSize="22sp"
+            tools:text="Date" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="30dp"
+        android:layout_marginLeft="10dp">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:fontFamily="@font/alegreya"
+            android:text="You paid        :"
+            android:textColor="#000000"
+            android:textSize="22sp" />
 
         <TextView
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="10dp"
             android:layout_weight="0.5"
+            android:fontFamily="@font/alegreya"
             android:text="Rs."
-            android:textColor="#000000" />
+            android:textColor="#000000"
+            android:textSize="22sp" />
 
         <TextView
             android:id="@+id/price_order_history"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_weight="4"
-            android:fontFamily="sans-serif-smallcaps"
+            android:fontFamily="@font/alegreya"
             android:textColor="#000000"
-            android:textSize="20sp"
+            android:textSize="22sp"
             tools:text="price" />
 
     </LinearLayout>

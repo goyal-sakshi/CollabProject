@@ -1,8 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
     android:layout_height="match_parent">
 
     <ListView
@@ -13,45 +12,46 @@
     <LinearLayout
         android:id="@+id/total_layout"
         android:layout_width="match_parent"
-        android:layout_height="45dp"
-        android:orientation="horizontal"
-        android:background="@color/colorAccent"
-        android:padding="5dp"
+        android:layout_height="50dp"
         android:layout_alignBottom="@id/list_view_cart"
-        android:layout_marginBottom="?attr/actionBarSize">
+        android:layout_marginBottom="?attr/actionBarSize"
+        android:background="@color/colorAccent"
+        android:orientation="horizontal"
+        android:padding="5dp">
 
         <TextView
             android:layout_width="0dp"
-            android:layout_weight="0.5"
             android:layout_height="match_parent"
-            android:textSize="20sp"
-            android:textStyle="bold"
-            android:gravity="center"
             android:layout_marginLeft="10dp"
-            android:fontFamily="sans-serif-smallcaps"
-            android:text="Total : " />
+            android:layout_weight="0.5"
+            android:fontFamily="@font/oregano"
+            android:gravity="center"
+            android:text="TOTAL : "
+            android:textSize="20sp"
+            android:textStyle="bold" />
 
         <TextView
             android:id="@+id/total_to_be_paid"
             android:layout_width="0dp"
-            android:layout_weight="1"
             android:layout_height="match_parent"
-            android:fontFamily="sans-serif-smallcaps"
-            android:textSize="20sp"
+            android:layout_weight="1"
+            android:fontFamily="@font/oregano"
             android:gravity="center"
             android:paddingRight="80dp"
+            android:textSize="20sp"
             android:textStyle="bold"
             tools:text="0" />
 
         <Button
             android:id="@+id/buy_now_button"
             android:layout_width="0dp"
-            android:layout_weight="1"
-            android:text="Buy now"
-            android:textSize="18dp"
-            android:background="#FFFFFF"
+            android:layout_height="40dp"
             android:layout_gravity="center"
-            android:layout_height="40dp" />
+            android:layout_weight="1"
+            android:background="#FFFFFF"
+            android:fontFamily="@font/oregano"
+            android:text="Buy now"
+            android:textSize="18dp" />
     </LinearLayout>
 
 </RelativeLayout>

@@ -1,5 +1,6 @@
 package com.example.android.fragmentdemo.fragments;
 
+import android.content.Context;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -37,10 +38,9 @@ public class HomeListFragment extends Fragment {
     private StorageReference mStorageReference;
 
     private ItemsAdapter mItemsAdapter;
+    private Context mContext;
 
-    private static final int RC_PHOTO_PICKER =  2;
-
-    public HomeListFragment(){
+    public HomeListFragment() {
 
     }
 
@@ -48,7 +48,8 @@ public class HomeListFragment extends Fragment {
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
 
-       View rootView = inflater.inflate(R.layout.fragment_home_list, container, false);
+        View rootView = inflater.inflate(R.layout.fragment_home_list, container, false);
+        mContext = getContext();
 
         mFirebaseDatabase = FirebaseDatabase.getInstance();
         mFirebaseStorage = FirebaseStorage.getInstance();
@@ -56,9 +57,10 @@ public class HomeListFragment extends Fragment {
         mItemDatabaseReference = mFirebaseDatabase.getReference().child("items");
         mStorageReference = mFirebaseStorage.getReference().child("item_images");
 
+
         ListView listView = (ListView) rootView.findViewById(R.id.list_view_home);
         List<Items> items = new ArrayList<>();
-        mItemsAdapter = new ItemsAdapter(getContext(),items);
+        mItemsAdapter = new ItemsAdapter(getContext(), items);
         listView.setAdapter(mItemsAdapter);
 
         if (mChildEventListener == null) {
@@ -87,7 +89,6 @@ public class HomeListFragment extends Fragment {
             };
             mItemDatabaseReference.addChildEventListener(mChildEventListener);
         }
-
 
         return rootView;
     }

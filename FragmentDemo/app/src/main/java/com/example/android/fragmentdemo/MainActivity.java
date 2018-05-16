@@ -11,7 +11,6 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-import com.example.android.fragmentdemo.adapters.ItemsAdapter;
 import com.example.android.fragmentdemo.fragments.CartListFragment;
 import com.example.android.fragmentdemo.fragments.HomeListFragment;
 import com.example.android.fragmentdemo.fragments.PaymentFragment;
@@ -30,8 +29,6 @@ public class MainActivity extends AppCompatActivity {
 
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mAuthStateListener;
-
-    private ItemsAdapter mItemsAdapter;
 
     public static final int RC_SIGN_IN = 1;
     public static final String ANONYMOUS = "anonymous";
@@ -72,13 +69,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-        //mTextMessage = (TextView) findViewById(R.id.message);
         BottomNavigationView navigation = (BottomNavigationView) findViewById(R.id.navigation);
         navigation.setOnNavigationItemSelectedListener(mOnNavigationItemSelectedListener);
 
         mUsername = ANONYMOUS;
 
-        if(savedInstanceState == null){
+        if (savedInstanceState == null) {
             FragmentManager fragmentManager = getSupportFragmentManager();
             fragmentManager.beginTransaction()
                     .add(R.id.container, new HomeListFragment())
@@ -91,22 +87,22 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
 
-                if(user != null){
+                if (user != null) {
                     //user is signed in
                     mUsername = user.getDisplayName();
                     createUser(user);
-                    Toast.makeText(MainActivity.this, "Hey! " + mUsername, Toast.LENGTH_SHORT).show();
-                }else{
+                    Toast.makeText(MainActivity.this, "Hey! " + mUsername, Toast.LENGTH_LONG).show();
+                } else {
                     //user is signed out
                     startActivityForResult(
                             AuthUI.getInstance()
                                     .createSignInIntentBuilder()
-                                    .setIsSmartLockEnabled(false,true)
+                                    .setIsSmartLockEnabled(false, true)
                                     .setAvailableProviders(Arrays.asList(
                                             new AuthUI.IdpConfig.EmailBuilder().build(),
                                             new AuthUI.IdpConfig.GoogleBuilder().build()))
-                            .build(),
-                    RC_SIGN_IN);
+                                    .build(),
+                            RC_SIGN_IN);
                 }
             }
         };
@@ -115,10 +111,10 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode == RC_SIGN_IN){
-            if(resultCode == RESULT_OK){
+        if (requestCode == RC_SIGN_IN) {
+            if (resultCode == RESULT_OK) {
                 //Toast.makeText(this, "Signed in!", Toast.LENGTH_SHORT).show();
-            }else if(resultCode == RESULT_CANCELED){
+            } else if (resultCode == RESULT_CANCELED) {
                 Toast.makeText(this, "Sign in Canceled", Toast.LENGTH_SHORT).show();
                 finish();
             }
@@ -146,7 +142,7 @@ public class MainActivity extends AppCompatActivity {
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()){
+        switch (item.getItemId()) {
             case R.id.sign_out_menu:
                 //sign out
                 AuthUI.getInstance().signOut(this);
@@ -155,8 +151,9 @@ public class MainActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-    private void createUser(FirebaseUser user){
-        DatabaseReference databaseReference= FirebaseDatabase.getInstance().getReference().child("users");
+
+    private void createUser(FirebaseUser user) {
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("users");
         databaseReference.child(user.getUid()).child("balance");
 
     }

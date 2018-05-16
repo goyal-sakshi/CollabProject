@@ -3,6 +3,7 @@ package com.example.android.fragmentdemo.adapters;
 import android.content.Context;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -15,8 +16,11 @@ import com.bumptech.glide.Glide;
 import com.example.android.fragmentdemo.R;
 import com.example.android.fragmentdemo.data.Items;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.List;
 
@@ -24,16 +28,16 @@ import java.util.List;
  * Created by hp on 3/27/2018.
  */
 
-public class ItemsAdapter extends ArrayAdapter<Items>{
+public class ItemsAdapter extends ArrayAdapter<Items> {
 
     public ItemsAdapter(@NonNull Context context, List<Items> itemIds) {
-        super(context,0,itemIds);
+        super(context, 0, itemIds);
     }
 
     @NonNull
     @Override
     public View getView(int position, @Nullable View convertView, @NonNull ViewGroup parent) {
-        if(convertView == null){
+        if (convertView == null) {
             convertView = LayoutInflater.from(getContext()).inflate(R.layout.list_item_home, parent, false);
         }
 
@@ -43,11 +47,11 @@ public class ItemsAdapter extends ArrayAdapter<Items>{
         itemNameTextView.setText(currentItem.getName());
 
         TextView itemPriceTextView = (TextView) convertView.findViewById(R.id.item_price_text_view);
-        itemPriceTextView.setText( currentItem.getPrice());
+        itemPriceTextView.setText(currentItem.getPrice());
 
-        ImageView itemImageView =(ImageView) convertView.findViewById(R.id.item_img_view);
+        ImageView itemImageView = (ImageView) convertView.findViewById(R.id.item_img_view);
         boolean isPhoto = currentItem.getImageUrl() != null;
-        if(isPhoto){
+        if (isPhoto) {
             itemImageView.setVisibility(View.VISIBLE);
             Glide.with(itemImageView.getContext())
                     .load(currentItem.getImageUrl())
@@ -58,13 +62,32 @@ public class ItemsAdapter extends ArrayAdapter<Items>{
         addToCartButton.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
+                final DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference()
                         .child("users").child(FirebaseAuth.getInstance().getUid()).child("cart");
 
-                Items items = new Items(currentItem.getPrice(), "1", currentItem.getName(),currentItem.getImageUrl());
-                databaseReference.child(currentItem.getName()).setValue(items);
+                final DatabaseReference referenceItemsQuantiy = FirebaseDatabase.getInstance().getReference()
+                        .child("items").child(currentItem.getName()).child("quantity");
 
-                Toast.makeText(getContext(), items.getName() + " added to yor CART", Toast.LENGTH_SHORT).show();
+                referenceItemsQuantiy.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        String quantity = dataSnapshot.getValue(String.class);
+                        Log.v("**", "**" + dataSnapshot.getValue());
+                        if (Integer.parseInt(quantity) == 0) {
+                            Toast.makeText(getContext(), "Sorry! This item is OUT OF STOCK!!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            Items items = new Items(currentItem.getPrice(), "1", currentItem.getName(), currentItem.getImageUrl());
+                            databaseReference.child(currentItem.getName()).setValue(items);
+
+                            Toast.makeText(getContext(), items.getName() + " added to yor CART", Toast.LENGTH_SHORT).show();
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
             }
         });
 
